@@ -1,6 +1,6 @@
 package com.chase;
 
-
+import com.chase.entity.Customer;
 
 /*
 
@@ -154,6 +154,10 @@ Branches   -- Prudhvi
 */
 public class Test {
 
-	
+	public static void main(String[] args) {
+		Customer cust = new Customer();  // 
+		
+		
+	}
 
 }
