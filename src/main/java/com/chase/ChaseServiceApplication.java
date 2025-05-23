@@ -9,5 +9,11 @@ public class ChaseServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ChaseServiceApplication.class, args);
 	}
+	
+	
+	public static void  addNumbers() {
+		// body 
+		
+	}
 
 }
