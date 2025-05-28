@@ -2,20 +2,19 @@ package com.chase.entity;
 
 public class Card {
 
-    private int cardId;
+    private Long cardId;
     private String cardType;      
     private String cardNumber;    
     private String expiryDate;   
     private int cvv;              
-    private String status;
-    String cardDetails;
+    private String status;        
 
     
     public Card() {
     }
 
 
-    public Card(int cardId, String cardType, String cardNumber, String expiryDate, int cvv, String status) {
+    public Card(Long cardId, String cardType, String cardNumber, String expiryDate, int cvv, String status) {
         this.cardId = cardId;
         this.cardType = cardType;
         this.cardNumber = cardNumber;
@@ -25,11 +24,11 @@ public class Card {
     }
 
 
-    public int getCardId() {
+    public Long getCardId() {
         return cardId;
     }
 
-    public void setCardId(int cardId) {
+    public void setCardId(Long cardId) {
         this.cardId = cardId;
     }
 
@@ -73,15 +72,4 @@ public class Card {
         this.status = status;
     }
 
-
-public void addcarduser() {
-	cardNumber = "24062000";
-	cardType = "Visa";
-	
-	cardDetails = cardNumber.concat(cardType);
-	
-}
-public void displaycarduser() {
-	System.out.println(cardDetails);
-}
 }
