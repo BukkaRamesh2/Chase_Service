@@ -3,7 +3,7 @@ package com.chase.entity;
 public class Branch {
     
   
-    public int branchId;
+    public Long branchId;
     public String name;
     public String address;
     public String manager;
@@ -16,7 +16,7 @@ public class Branch {
     }
 
   
-    public Branch(int branchId, String name, String address, String manager, int code, float timings) {
+    public Branch(Long branchId, String name, String address, String manager, int code, float timings) {
         this.branchId = branchId;
         this.name = name;
         this.address = address;
@@ -26,11 +26,11 @@ public class Branch {
     }
 
    
-    public int getBranchId() {
+    public Long getBranchId() {
         return branchId;
     }
 
-    public void setBranchId(int branchId) {
+    public void setBranchId(Long branchId) {
         this.branchId = branchId;
     }
 
