@@ -7,7 +7,8 @@ public class Card {
     private String cardNumber;    
     private String expiryDate;   
     private int cvv;              
-    private String status;        
+    private String status;
+    String cardDetails;
 
     
     public Card() {
@@ -71,4 +72,16 @@ public class Card {
     public void setStatus(String status) {
         this.status = status;
     }
+
+
+public void addcarduser() {
+	cardNumber = "24062000";
+	cardType = "Visa";
+	
+	cardDetails = cardNumber.concat(cardType);
+	
+}
+public void displaycarduser() {
+	System.out.println(cardDetails);
+}
 }
