@@ -152,12 +152,20 @@ Branches   -- Prudhvi
 
 
 */
-public class Test {
+public class Test extends Customer{
 
 	public static void main(String[] args) {
 		Customer cust = new Customer();  // 
 		
 		
+	}
+	
+	public void test() {
+		System.out.println("print messgae from test");
+	}
+	
+	public void displayUser() {
+		System.out.println("This message is from test class");
 	}
 
 }

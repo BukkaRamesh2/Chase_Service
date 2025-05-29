@@ -1,5 +1,12 @@
 package com.chase.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "customers")
 public class Customer {
 
 	public Customer() {
@@ -88,13 +95,97 @@ public class Customer {
 	 *  @Repository -- ORM / JPA -- save data in  database
 	 *  
 	 *  
+	 *  
+	 *  
 	 *  @Autowired -- this is responsbile to create objects 
 	 *  
 	 *  Customer cust = new CUstomer();
 	 *  
 	 *  
+	 *   OOPS
+	 *   Inheritance   --- extends 
+	 *   Abstraction  -- hiding interface 
+	 *   encapsulation  -- wrapping everything together -- data memebers, data objects, methods -- model / entity 
+	 *   polymorphism  -- method overloading and method overriding  -- compile time and run time
+	 *   
+	 *   -- a method with smae name and different method signature is called method is overloaded  
+	 *   -- a method with same name and same method signature same a=no iof parameters is called method over riding 
+	 *   
+	 *   
+	 *    Decision making statments and loops
+	 *    IF ELSE statmemnt
+	 *    switch statments
+	 *    
+	 *    
+	 *    if()
+	 *       if()
+	 *         if()
+	 *            
+	 *            else  
+	 *  
+	 *   Switch expression
+	 *      cases 1
+	 *      cases 2
+	 *      case 3
+	 *      case 4
+	 *      
+	 *      default 
+	 *      
+	 *      
+	 *      if(condition){
+	 *      body
+	 *      }else{
+	 *      body
+	 *      }
+	 *      
+	 *      
+	 *      if(condition){
+	 *          if(condition){
+	 *          body
+	 *          }
+	 *      }else if(condition){
+	 *      body
+	 *      } else{
+	 *      
+	 *      }
+	 *      
+	 *      
+	 *      Loops
+	 *      // list of customers whose count is 100 
+	 *      
+	 *      For Loops
+	 *      for(initlisation; conditon check; incremental/decrement){
+	 *      
+	 *      }
+	 *      
+	 *      ForEach(variable : collection){
+	 *        single record
+	 *      }
+	 *      
+	 *      while loop 
+	 *        while(i=0) {
+	 *            if(){
+	 *            break;  // continue
+	 *            /asdasdasd
+	 *            asdasd
+	 *            asdas
+	 *            
+	 *            }
+	 *            
+	 *        }
+	 *        
+	 *        break 
+	 *        continue
+	 *      
+	 *      
+	 *      
+	 *      
+	 *      
+	 *      
+	 *      
 	 */
-	
+	   @Id
+	   @GeneratedValue()
 	   private Long id;   // gllobal varaible 
 	   private String firstName;
 	   private String lastName;
@@ -103,6 +194,7 @@ public class Customer {
 	   public Integer mobileNumber;
 	   protected boolean status;
 	   String fullName;
+	   String gender;
 	   
 	   // getter and seeter methods with public 
 	   
@@ -163,7 +255,15 @@ public class Customer {
 	}
 	   
 	  
-    //add user  POSTMAPPING
+    public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	//add user  POSTMAPPING  its method overloading ROI 5percent base 
 	public void addUser() {
  		lastName = "Sam";
  		firstName = "Joardan";
@@ -174,9 +274,30 @@ public class Customer {
  		
 	}
 	
+	public void addUser(Customer customer) {
+ 		lastName = "Sam";
+ 		firstName = "Joardan";
+ 		
+ 		   //local variable the scope only exists in the method
+ 		fullName = firstName.concat(lastName);
+ 		
+ 		
+	}
+	
+	public void addUser(Customer customer, boolean status) {
+ 		lastName = "Sam";
+ 		firstName = "Joardan";
+ 		
+ 		   //local variable the scope only exists in the method
+ 		fullName = firstName.concat(lastName);
+ 		
+ 		
+	}
+	
+	
 	//GetMapping
 	public void displayUser() {
-		System.out.println(fullName);
+		System.out.println("This message is from customer class");
 	}
 	   
 	   

@@ -10,19 +10,26 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.chase.Test;
 import com.chase.entity.Customer;
 import com.chase.service.CustomerService;
 
 @RestController 
 @RequestMapping
 public class CustomerController {
-
-	public CustomerController() {
-		// TODO Auto-generated constructor stub
-	}
+	
 	
 	@Autowired
-	CustomerService custService; 
+	CustomerService custService; // 
+	
+	
+	public static void main(String[] args) {
+		Test t = new Test();  // if your object is created you are cabale o0f reading all the memebers and methods 
+		t.test();
+		t.displayUser();
+		t.addUser();
+		
+	}
 	
 	@PostMapping
 	public Customer addCustomer(Customer customer) {
