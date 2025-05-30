@@ -59,4 +59,23 @@ public class Account {
     public void setActive(boolean active) {
         isActive = active;
     }
+    
+    public void addAccount() {
+
+        this.accountId = 1234567890L;
+        this.customerId = 1L;
+        this.accountType = "Savings";
+        this.balance = 1000.00;
+        this.routingNumber = "123456789";
+        this.isActive = true;
+    }
+    
+    public void displayAccount() {
+        System.out.println("Account ID: " + accountId);
+        System.out.println("Customer ID: " + customerId);
+        System.out.println("Type: " + accountType);
+        System.out.println("Balance: $" + balance);
+        System.out.println("Routing Number: " + routingNumber);
+        System.out.println("Active: " + isActive);
+    }
 }

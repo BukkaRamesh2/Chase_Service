@@ -2,30 +2,77 @@ package com.chase.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.chase.entity.Account;
+import com.chase.reposiroty.AccountRepository;
 
+@Service
 public class AccountServiceImpl implements AccountService {
-
-    public AccountServiceImpl() {
-		// TODO Auto-generated constructor stub
-	}
+	
+	@Autowired
+	AccountRepository accountRepository;
 
 	@Override
 	public Account createAccount(Account account) {
-		// TODO Auto-generated method stub
-		return null;
+		boolean isValid = true;
+		if (account.getCustomerId() == null || account.getCustomerId() <= 0) {
+	        System.out.println("Invalid Customer ID.");
+	        isValid = false;
+	    }
+
+	    if (account.getRoutingNumber() == null || !account.getRoutingNumber().matches("^\\d{9}$")) {
+	        System.out.println("Routing number must be a 9-digit number.");
+	        isValid = false;
+	    }
+
+	    if (account.getBalance() == null || account.getBalance() < 0) {
+	        System.out.println("Invalid account balance");
+	        isValid = false;
+	    }
+
+	    if (account.getAccountType() == null) {
+	        System.out.println("Account type cannot be null.");
+	        isValid = false;
+	    } else {
+	        List<String> validTypes = List.of("savings", "checking", "business");
+	        String type = account.getAccountType().toLowerCase();
+	        if (!validTypes.contains(type)) {
+	            isValid = false;
+	        } 
+	    }
+
+	    if (!isValid) {
+	        System.out.println("Account creation failed due to invalid input.");
+	        return null;
+	    }
+
+	    return accountRepository.save(account);
 	}
 
 	@Override
 	public Account getAccount(Long accountId) {
-		// TODO Auto-generated method stub
-		return null;
+		if (accountId == null || accountId <= 0) {
+	        System.out.println("Invalid account ID provided.");
+	        return null;
+	    }
+		return accountRepository.getById(accountId);
 	}
 
 	@Override
 	public List<Account> getAllAccounts() {
-		// TODO Auto-generated method stub
-		return null;
+		 List<Account> accounts = accountRepository.findAll();
+		    if (accounts.isEmpty()) {
+		        System.out.println("No accounts found in the database.");
+		    } else {
+		    	accounts.forEach(account -> {
+		            if (account.isActive()) {
+		                System.out.println("Account ID " + account.getAccountId() + " is active.");
+		            }
+		        });
+		    }
+		    return accounts;
 	}
 
 	@Override
