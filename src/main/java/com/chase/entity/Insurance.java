@@ -1,10 +1,17 @@
 package com.chase.entity;
 import java.time.LocalDate;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "customers")
 public class Insurance {
 	
-	
+	@Id
+	@GeneratedValue()
 	private String customername;
 	private Long customerId;
 	private Long insuranceId;
@@ -65,5 +72,7 @@ public class Insurance {
 		this.status = status;
 	}
 	
-	
+	public void displayuser() {
+		System.out.println("This is message from Insurance class");
+	}
 }

@@ -1,5 +1,11 @@
 package com.chase.InsuranceUtil;
 
-public class TrailPolymorphism {
+import com.chase.Test;
+
+public class TrailPolymorphism extends Test{
+	public void test() {
+		System.out.println("Hello in Trail Polymorphism");
+	}
+
 
 }
