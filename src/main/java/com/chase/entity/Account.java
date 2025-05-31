@@ -1,15 +1,25 @@
 package com.chase.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="Account")
 public class Account {
 
     public Account() {
     }
 
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long accountId;
     private Long customerId;
     private String accountType;    
     private Double balance;
-    private String routingNumber;   // 9-digit ABA routing number
+    private String routingNumber;
     private boolean isActive;
 
     public Long getAccountId() {
