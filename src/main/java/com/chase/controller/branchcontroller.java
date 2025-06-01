@@ -4,6 +4,12 @@ package com.chase.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,31 +29,34 @@ public class branchcontroller {
 	@Autowired
 	branchservice custservice;
 	
-	public Branch addBranch(Branch branch) {
+	
+	@PostMapping("/addBranch")
+	public Branch addBranch(@RequestBody Branch branch) {
 		
 		return custservice.addBranch(branch);
 		}
 	
 	
-	public Branch getBranch(int branchId) {
+	@GetMapping("/getBranch/{branchId}")
+	public Branch getBranch(@PathVariable int branchId) {
 		
 		return custservice.getBranch(branchId);
 		}
 	
-	
+	@GetMapping("/getallBranches")
 	public List<Branch> getallBranchs(){
 		
 		return custservice.getallBranchs();
 		}
 	
-	
-	public Branch updateBranch(Branch branch) {
+	@PutMapping("/updateBranch")
+	public Branch updateBranch(@RequestBody Branch branch) {
 		
 		return custservice.updateBranch(branch);
 		}
 	
-	
-	public Branch deleteBranch(int branchId) {
+	@DeleteMapping("/deleteBranch/{branchId}")
+	public Branch deleteBranch(@PathVariable int branchId) {
 		return custservice.deleteBranch(branchId);
 		
 	}
