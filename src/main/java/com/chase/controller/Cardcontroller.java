@@ -5,52 +5,52 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-  import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chase.entity.Card;
 import com.chase.service.Cardservice;
 @RestController
-@RequestMapping
-
+@RequestMapping("/card")
 public class Cardcontroller {
 	public Cardcontroller() {
 		
 	}
 	
 	@Autowired
+	Cardservice cardService;
 	
-	Cardservice crdService;
-	
-	@PostMapping
-	public Card addCard(Card card) {
-		return crdService.addCard(card);
+	@PostMapping("/addcard")
+	public Card addCard(@RequestBody Card card) {
+		return cardService.addCard(card);
 	}
 	
-	@GetMapping
-	public Card getCard(String cardNumber) {
-		return crdService.getCard(cardNumber);
+	@GetMapping("getCard/{cardNumber}")
+	public Card getCard(@PathVariable String cardNumber) {
+		return cardService.getCard(cardNumber);
 	}
 	
 	
-	@GetMapping
+	@GetMapping("/getAllcards")
 	public List<Card> getAllCards() {
-		return crdService.getAllCard();
+		return cardService.getAllCard();
 	}
 	
-	@PutMapping
-	public Card updateCard(Card card) {
-		return crdService.updateCard(card);
+	@PutMapping("/updateCard")
+	public Card updateCard(@RequestBody Card card) {
+		return cardService.updateCard(card);
 		}
 	
-	@DeleteMapping
-	public Card deleteCard(String cardnumber) {
-		return crdService.deletecard(cardnumber);
+	@DeleteMapping("/deletecards/{cardnumber}")
+	public Card deleteCard(@PathVariable String cardnumber) {
+		return cardService.deletecard(cardnumber);
 	}
 	
-	
+	 
 	
 
 }

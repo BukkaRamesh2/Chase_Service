@@ -3,10 +3,11 @@ package com.chase.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.chase.entity.Card;
 import com.chase.repository.cardrepository;
-
+@Service
 public class Cardserviceimplementation implements Cardservice {
 
     @Autowired
@@ -20,7 +21,7 @@ public class Cardserviceimplementation implements Cardservice {
     public Card addCard(Card card) {
         if (card.getCardType() == null) {
             System.out.println("The customer doesn't have a card type");
-        } else {
+        } else {  
             switch (card.getCardType().toLowerCase()) {
                 case "debit":
                     System.out.println("The customer has a debit card");
@@ -32,7 +33,7 @@ public class Cardserviceimplementation implements Cardservice {
                     System.out.println("The customer has another card type");
             }
         }
-        return null;
+        return cardRepository.save(card);
     }
 
     @Override

@@ -1,7 +1,17 @@
 package com.chase.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="Card")
 public class Card {
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
     private Long cardId;
     private String cardType;      
     private String cardNumber;    
