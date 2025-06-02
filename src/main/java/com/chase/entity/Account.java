@@ -1,6 +1,10 @@
 package com.chase.entity;
 
+import com.chase.enums.AccountType;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,7 +21,9 @@ public class Account {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long accountId;
     private Long customerId;
-    private String accountType;    
+    
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;    
     private Double balance;
     private String routingNumber;
     private boolean isActive;
@@ -38,11 +44,11 @@ public class Account {
         this.customerId = customerId;
     }
 
-    public String getAccountType() {
+    public AccountType getAccountType() {
         return accountType;
     }
 
-    public void setAccountType(String accountType) {
+    public void setAccountType(AccountType accountType) {
         this.accountType = accountType;
     }
 
@@ -74,7 +80,7 @@ public class Account {
 
         this.accountId = 1234567890L;
         this.customerId = 1L;
-        this.accountType = "Savings";
+        this.accountType = AccountType.SAVINGS;
         this.balance = 1000.00;
         this.routingNumber = "123456789";
         this.isActive = true;

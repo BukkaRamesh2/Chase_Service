@@ -35,12 +35,6 @@ public class AccountServiceImpl implements AccountService {
 	    if (account.getAccountType() == null) {
 	        System.out.println("Account type cannot be null.");
 	        isValid = false;
-	    } else {
-	        List<String> validTypes = List.of("savings", "checking", "business");
-	        String type = account.getAccountType().toLowerCase();
-	        if (!validTypes.contains(type)) {
-	            isValid = false;
-	        } 
 	    }
 
 	    if (!isValid) {
@@ -77,8 +71,15 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public Account updateAccount(Account account) {
-		// TODO Auto-generated method stub
-		return null;
+		if (account == null || account.getAccountId() == null) {
+			System.out.println("Account or Account ID cannot be null.");
+	    }
+
+	    if (!accountRepository.existsById(account.getAccountId())) {
+	    	System.out.println("Account not found with ID: " + account.getAccountId());
+	    }
+
+	    return accountRepository.save(account);
 	}
 
 	@Override
