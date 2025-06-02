@@ -3,18 +3,19 @@ import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "customers")
+@Table(name = "insurances")
 public class Insurance {
 	
 	@Id
-	@GeneratedValue()
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Long insuranceId;
 	private String customername;
 	private Long customerId;
-	private Long insuranceId;
 	private String insuranceType;
 	private Integer insuranceTerm;
 	private LocalDate insuranceStartDate;

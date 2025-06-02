@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,32 +28,32 @@ public class Insurancecontroller extends Test{
 	@Autowired
 	Insuranceservice insuranceservice;
 
-	@PostMapping
+	@PostMapping ("/addInsurance")
 	public Insurance addInsurance(@RequestBody Insurance insurance) {
 		return insuranceservice.addInsurance(insurance);
 		
 	}
 	
-	@GetMapping
-	public Insurance getInsurance(long insuranceId) {
+	@GetMapping ("/getInsurances/{insuranceId}")
+	public Insurance getInsurance(@PathVariable Long insuranceId) {
 		return insuranceservice.getInsurance(insuranceId);
 		
 	}
 	
-	@GetMapping
+	@GetMapping ("/getAllInsurances")
 	public List<Insurance> getAllInsurance(){
 		return insuranceservice.getAllInsurance();
 		
 	}
 	
-	@PutMapping
-	public Insurance updateInsurance(Insurance insurance) {
+	@PutMapping ("/updateInsurance")
+	public Insurance updateInsurance(@RequestBody Insurance insurance) {
 		return insuranceservice.updateInsurance(insurance);
 		
 	}
 	
-	@DeleteMapping
-	public Insurance deleteInsurance(long insuranceId) {
+	@DeleteMapping ("/deleteInsurance{insuranceId}")
+	public Insurance deleteInsurance(@PathVariable Long insuranceId) {
 		return insuranceservice.deleteInsurance(insuranceId);
 		
 	}

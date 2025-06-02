@@ -52,11 +52,11 @@ public class Insuranceserviceimpl implements Insuranceservice{
 				System.out.println("Customer has other insurances");
 			}
 		}
-		return null;
+		return insurancerepository.save(insurance);
 	}
 
 	@Override
-	public Insurance getInsurance(long insuranceId) {
+	public Insurance getInsurance(Long insuranceId) {
 		// TODO Auto-generated method stub
 		
 		if(insuranceId != null && insuranceId > 0) {
@@ -94,7 +94,7 @@ public class Insuranceserviceimpl implements Insuranceservice{
 	}
 
 	@Override
-	public Insurance deleteInsurance(long insuranceId) {
+	public Insurance deleteInsurance(Long insuranceId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

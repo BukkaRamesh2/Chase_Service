@@ -7,10 +7,10 @@ import com.chase.entity.Insurance;
 public interface Insuranceservice {
 	
 	public Insurance addInsurance(Insurance insurance);
-	public Insurance getInsurance(long insuranceId);
+	public Insurance getInsurance(Long insuranceId);
 	public List<Insurance> getAllInsurance();
 	public Insurance updateInsurance(Insurance insurance);
-	public Insurance deleteInsurance(long insuranceId);
+	public Insurance deleteInsurance(Long insuranceId);
 	
 	
 	
