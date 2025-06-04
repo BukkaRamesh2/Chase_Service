@@ -1,7 +1,15 @@
 package com.chase.entity;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.chase.enums.AccountType;
 
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -27,8 +35,41 @@ public class Account {
     private Double balance;
     private String routingNumber;
     private boolean isActive;
+    
+    @ElementCollection
+    private List<Long> transactionIds = new ArrayList<>();
+    
+    @ElementCollection
+    private Set<String> authorizedUsers = new HashSet<>();
+    
+    @ElementCollection
+    private Map<String, Double> accountLimits = new HashMap<>();
 
-    public Long getAccountId() {
+    public List<Long> getTransactionIds() {
+		return transactionIds;
+	}
+
+	public void setTransactionIds(List<Long> transactionIds) {
+		this.transactionIds = transactionIds;
+	}
+
+	public Set<String> getAuthorizedUsers() {
+		return authorizedUsers;
+	}
+
+	public void setAuthorizedUsers(Set<String> authorizedUsers) {
+		this.authorizedUsers = authorizedUsers;
+	}
+
+	public Map<String, Double> getAccountLimits() {
+		return accountLimits;
+	}
+
+	public void setAccountLimits(Map<String, Double> accountLimits) {
+		this.accountLimits = accountLimits;
+	}
+
+	public Long getAccountId() {
         return accountId;
     }
 
