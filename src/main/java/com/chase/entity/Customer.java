@@ -1,12 +1,31 @@
 package com.chase.entity;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "customers")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Customer {
 
 	public Customer() {
@@ -14,6 +33,11 @@ public class Customer {
 	}
 	
 	
+	public Customer(String string) {
+		this.firstName = string;
+	}
+
+
 	/*
 	 * 
 	 *  datat types and variable , access specifers 
@@ -178,15 +202,69 @@ public class Customer {
 	 *        continue
 	 *      
 	 *      
+	 *      {
+  
+  "firstName": "ALex",
+  "lastName": "V",
+  "address": "TX",
+  "email": "a@gmail.com",
+  "mobileNumber": 1234221,
+  "status": true,
+  "fullName": "ALex V",
+  "gender": "Male",
+  "phoneNumbers": ["1234567890", "1234567890"],
+  "accountTypes": ["SAVINGS", "CHECKING"],
+  "accountBalances": {
+    "SAVINGS": 1000.50,
+    "CHECKING": 200.75
+  }
+}        
+	 *      Checked Exception  -- CompileTime Exception  -- CustomerNotFoundException
+	 *      Unchecked Exception --  RunTime Exception  -- IllegalArgumentException, DataCorruptionException
+	 *      ArrayIndexOutOfBoundException 
+	 *      ArithemeticException
+	 *      FilesNotFoundException
 	 *      
+	 *      
+	 *      Exception
+	 *      RunTimeException
+	 *      
+	 *        Try {
+	 *        
+	 *         adding customer
+	 *        
+	 *        } catch (Exception e ){
+	 *          if any error occurs 
+	 *        }
+	 *        
+	 *        int name[2] = {1,2,3} //array
+	 *        10 /1000   
+	 *        File file = new File(c:\\test.txt);
+	 *        file.getStream();  /// 
+	 *       
+	 *       
+	 *       
+	 *          try{
+	 *          adding customer
+	 *          }catch(Exception e){
+	 *            e.printStackTrace();
+	 *            throw new 
+	 *          }
+	 *           
+	 *          throw 
+	 *          throws   -- this is more used at method level exception 
+	 *          finally  -- 
+	 *          
 	 *      
 	 *      
 	 *      
 	 *      
 	 */
+	
 	   @Id
-	   @GeneratedValue()
+	   @GeneratedValue(strategy = GenerationType.AUTO)
 	   private Long id;   // gllobal varaible 
+	   
 	   private String firstName;
 	   private String lastName;
 	   private String address;
@@ -196,72 +274,135 @@ public class Customer {
 	   String fullName;
 	   String gender;
 	   
-	   // getter and seeter methods with public 
-	   
-	   public String getFirstName() {
-		   return this.firstName;
-	   }
-	   
-	   public void setFirstName(String firstName) {
-		   this.firstName = firstName;
-	   }
+	    @ElementCollection
+		private List<String> phoneNumbers = new ArrayList<String>();
+		
+	    @ElementCollection
+		private Map<String, Double>  accountBalances = new HashMap<>();
+		
+	    @ElementCollection
+		private Set<String> accountTypes  = new HashSet<>();
+	  
+	  
+	public List<String> getPhoneNumbers() {
+		return phoneNumbers;
+	}
+
+
+	public void setPhoneNumbers(List<String> phoneNumbers) {
+		this.phoneNumbers = phoneNumbers;
+	}
+
+
+	public Set<String> getAccountTypes() {
+		return accountTypes;
+	}
+
+
+	public void setAccountTypes(Set<String> accountTypes) {
+		this.accountTypes = accountTypes;
+	}
+
+
+	public Map<String, Double> getAccountBalances() {
+		return accountBalances;
+	}
+
+
+	public void setAccountBalances(Map<String, Double> accountBalances) {
+		this.accountBalances = accountBalances;
+	}
+
 
 	public Long getId() {
 		return id;
 	}
 
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
 
 	public String getLastName() {
 		return lastName;
 	}
 
+
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
 
 	public String getAddress() {
 		return address;
 	}
 
+
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
 
 	public String getEmail() {
 		return email;
 	}
 
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 
 	public Integer getMobileNumber() {
 		return mobileNumber;
 	}
 
+
 	public void setMobileNumber(Integer mobileNumber) {
 		this.mobileNumber = mobileNumber;
 	}
+
 
 	public boolean isStatus() {
 		return status;
 	}
 
+
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
-	   
-	  
-    public String getGender() {
+
+
+	public String getFullName() {
+		return fullName;
+	}
+
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+
+	public String getGender() {
 		return gender;
 	}
+
 
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+
 
 	//add user  POSTMAPPING  its method overloading ROI 5percent base 
 	public void addUser() {
@@ -298,6 +439,27 @@ public class Customer {
 	//GetMapping
 	public void displayUser() {
 		System.out.println("This message is from customer class");
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(address, email, firstName, fullName, gender, id, lastName, mobileNumber, status);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Customer other = (Customer) obj;
+		return Objects.equals(address, other.address) && Objects.equals(email, other.email)
+				&& Objects.equals(firstName, other.firstName) && Objects.equals(fullName, other.fullName)
+				&& Objects.equals(gender, other.gender) && Objects.equals(id, other.id)
+				&& Objects.equals(lastName, other.lastName) && Objects.equals(mobileNumber, other.mobileNumber)
+				&& status == other.status;
 	}
 	   
 	   
