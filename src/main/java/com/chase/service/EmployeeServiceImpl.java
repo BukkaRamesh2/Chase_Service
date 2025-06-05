@@ -4,6 +4,8 @@ package com.chase.service;
 import com.chase.entity.Employee;
 
 import com.chase.repository.EmployeeRepository;
+import com.chase.util.EmployeeNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -74,28 +76,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 //        return null;
 //    }
     	
-    	if (empId != null && empId > 0) {
-            System.out.println("Searching for employee with ID: " + empId);
-
-            // Try from map first
-            if (employeeMap.containsKey(empId)) {
-                System.out.println("Found in cache");
-                return employeeMap.get(empId);
-            }
-
-            // Fallback to DB
-            Employee employee = employeeRepository.findById(empId).orElse(null);
-            if (employee != null) {
-                employeeCache.add(employee);
-                employeeMap.put(empId, employee);
-            } else {
-                System.out.println("Employee not found.");
-            }
-            return employee;
-        } else {
-            System.out.println("Invalid employee ID.");
+    	if (empId == null || empId <= 0) {
+            throw new IllegalArgumentException("Invalid employee ID.");
         }
-        return null;
+
+        if (employeeMap.containsKey(empId)) {
+            return employeeMap.get(empId);
+        }
+
+        Employee employee = employeeRepository.findById(empId)
+            .orElseThrow(() -> new EmployeeNotFoundException("Employee with ID " + empId + " not found."));
+
+        employeeCache.add(employee);
+        employeeMap.put(empId, employee);
+        return employee;
     }
 
 
@@ -155,22 +149,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Override
 	public Employee deleteEmployee(Long empId) {
-		// TODO Auto-generated method stub
-		if (empId != null && employeeRepository.existsById(empId)) {
-            employeeRepository.deleteById(empId);
+	    if (empId == null || !employeeRepository.existsById(empId)) {
+	        throw new EmployeeNotFoundException("Employee with ID " + empId + " not found.");
+	    }
 
-            // Remove from collections
-            employeeMap.remove(empId);
-            employeeCache.removeIf(e -> e.getEmployeeId().equals(empId));
-            highsalariedempId.remove(empId);
+	    employeeRepository.deleteById(empId);
 
-            System.out.println("Deleted employee with ID: " + empId);
-            return null;
-        } else {
-            System.out.println("Employee ID invalid or not found.");
-        }
-        return null;
-    }
+	    employeeMap.remove(empId);
+	    employeeCache.removeIf(e -> e.getEmployeeId().equals(empId));
+	    highsalariedempId.remove(empId);
+
+	    System.out.println("Deleted employee with ID: " + empId);
+	    return null;
+	}
+
 		
 
 }
