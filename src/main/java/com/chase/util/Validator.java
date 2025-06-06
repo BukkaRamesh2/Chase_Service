@@ -1,4 +1,4 @@
-package com.chase.utils;
+package com.chase.util;
 
 public interface Validator {
 	boolean isValid(String input);

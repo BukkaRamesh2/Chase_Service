@@ -1,4 +1,4 @@
-package com.chase.utils;
+package com.chase.util;
 
 public class AccountIdValidator implements Validator{
 

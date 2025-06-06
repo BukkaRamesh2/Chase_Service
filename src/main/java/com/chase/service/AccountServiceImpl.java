@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.chase.entity.Account;
 import com.chase.reposiroty.AccountRepository;
+import com.chase.util.AccountNotFoundException;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -25,7 +26,7 @@ public class AccountServiceImpl implements AccountService {
 	AccountRepository accountRepository;
 
 	@Override
-	public Account createAccount(Account account) {
+	public Account createAccount(Account account){
 		boolean isValid = true;
 		if (account.getCustomerId() == null || account.getCustomerId() <= 0) {
 	        System.out.println("Invalid Customer ID.");
@@ -58,28 +59,34 @@ public class AccountServiceImpl implements AccountService {
 
 	    if (!isValid) {
 	        System.out.println("Account creation failed due to invalid input.");
-	        return null;
+	        throw new IllegalArgumentException("Something in Account details is null");
 	    }
 	    
-	    List<String> originalList = new ArrayList<>(account.getAuthorizedUsers());
-
-	    List<String> arrayList = new ArrayList<>(originalList);
-	    List<String> linkedList = new LinkedList<>(originalList);
-
-	    long startArray = System.nanoTime();
-	    arrayList.add("User1");
-	    arrayList.add("User2");
-	    arrayList.add("User3");
-	    long endArray = System.nanoTime();
-
-	    long startLinked = System.nanoTime();
-	    linkedList.add("LinkedUser1");
-	    linkedList.add("LinkedUser2");
-	    linkedList.add("LinkedUser3");
-	    long endLinked = System.nanoTime();
-
-	    System.out.println("ArrayList add operation time: " + (endArray - startArray) + " ns");
-	    System.out.println("LinkedList add operation time: " + (endLinked - startLinked) + " ns");
+	    try {
+	    
+		    List<String> originalList = new ArrayList<>(account.getAuthorizedUsers());
+	
+		    List<String> arrayList = new ArrayList<>(originalList);
+		    List<String> linkedList = new LinkedList<>(originalList);
+	
+		    long startArray = System.nanoTime();
+		    arrayList.add("User1");
+		    arrayList.add("User2");
+		    arrayList.add("User3");
+		    long endArray = System.nanoTime();
+	
+		    long startLinked = System.nanoTime();
+		    linkedList.add("LinkedUser1");
+		    linkedList.add("LinkedUser2");
+		    linkedList.add("LinkedUser3");
+		    long endLinked = System.nanoTime();
+	
+		    System.out.println("ArrayList add operation time: " + (endArray - startArray) + " ns");
+		    System.out.println("LinkedList add operation time: " + (endLinked - startLinked) + " ns");
+		    
+	    }catch(Exception e){
+	    	e.printStackTrace();
+	    }
 	    
 
 	    return accountRepository.save(account);
@@ -89,7 +96,7 @@ public class AccountServiceImpl implements AccountService {
 	public Account getAccount(Long accountId) {
 		if (accountId == null || accountId <= 0) {
 	        System.out.println("Invalid account ID provided.");
-	        return null;
+	        throw new AccountNotFoundException();
 	    }
 		return accountRepository.getById(accountId);
 	}
@@ -132,6 +139,7 @@ public class AccountServiceImpl implements AccountService {
 	public Account updateAccount(Account account) {
 		if (account == null || account.getAccountId() == null) {
 			System.out.println("Account or Account ID cannot be null.");
+			throw new AccountNotFoundException("Account not found");
 	    }
 
 	    if (!accountRepository.existsById(account.getAccountId())) {

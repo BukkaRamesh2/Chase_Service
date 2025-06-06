@@ -3,9 +3,10 @@ package com.chase.service;
 import java.util.List;
 
 import com.chase.entity.Account;
+import com.chase.util.AccountNotFoundException;
 
 public interface AccountService {
-    public Account createAccount(Account account);
+    public Account createAccount(Account account) throws AccountNotFoundException;
     public Account getAccount(Long accountId);
     public List<Account> getAllAccounts();
     public Account updateAccount(Account account);

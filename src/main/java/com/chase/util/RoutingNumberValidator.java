@@ -1,4 +1,4 @@
-package com.chase.utils;
+package com.chase.util;
 
 public class RoutingNumberValidator implements Validator{
 
