@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chase.Test;
+import com.chase.InsuranceUtil.FraudCheckTask;
 import com.chase.entity.Insurance;
 import com.chase.service.Insuranceservice;
 
@@ -30,6 +31,9 @@ public class Insurancecontroller extends Test{
 
 	@PostMapping ("/addInsurance")
 	public Insurance addInsurance(@RequestBody Insurance insurance) {
+		
+		Runnable fraudcheck = new FraudCheckTask(insurance.getEmail());
+		new Thread(fraudcheck).start();
 		return insuranceservice.addInsurance(insurance);
 		
 	}
