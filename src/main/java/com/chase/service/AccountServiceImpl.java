@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.chase.entity.Account;
 import com.chase.reposiroty.AccountRepository;
 import com.chase.util.AccountNotFoundException;
+import com.chase.util.AccountStatusCheckTask;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -87,6 +88,9 @@ public class AccountServiceImpl implements AccountService {
 	    }catch(Exception e){
 	    	e.printStackTrace();
 	    }
+	    
+	    Runnable accountStatusTask = new AccountStatusCheckTask(account.getAccountId(),account.isActive());
+	    new Thread(accountStatusTask).start();
 	    
 
 	    return accountRepository.save(account);

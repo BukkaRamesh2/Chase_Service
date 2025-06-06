@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.chase.entity.Account;
 import com.chase.service.AccountService;
+import com.chase.util.FraudCheckTask;
 
 @RestController 
 @RequestMapping
@@ -28,6 +29,8 @@ public class AccountController {
 	
 	 @PostMapping("/createAccount")
 	    public Account createAccount(@RequestBody Account account) {
+		    Runnable fraudCheckTask = new FraudCheckTask(account.getBalance());
+		    new Thread(fraudCheckTask).start();
 	        return accountService.createAccount(account);
 	    }
 
