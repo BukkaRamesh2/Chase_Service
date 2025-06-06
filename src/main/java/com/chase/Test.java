@@ -11,7 +11,7 @@ public class Test extends Insurance{
 		System.out.println("print message from test");
 	}
 
-	public void displayuser() {
-		System.out.println("This is message from Test class");
-	}
+	//public void displayuser() {
+		//System.out.println("This is message from Test class");
+	//}
 }

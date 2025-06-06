@@ -1,10 +1,22 @@
 package com.chase.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.chase.InsuranceUtil.InsuranceNotFoundException;
 import com.chase.controller.Insurancecontroller;
 import com.chase.entity.Insurance;
 import com.chase.repository.Insurancerepository;
@@ -17,7 +29,7 @@ public class Insuranceserviceimpl implements Insuranceservice{
 	
 	public static void main(String[] args) {
 		Insurancecontroller t = new Insurancecontroller();
-		t.displayuser();
+		//t.displayuser();
 	}
 
 	@Autowired
@@ -31,6 +43,41 @@ public class Insuranceserviceimpl implements Insuranceservice{
 	public Insurance addInsurance(Insurance insurance) {
 		// TODO Auto-generated method stub
 		
+		try {
+			
+			List<String> arrayList = new ArrayList<>(insurance.getPhoneNumbers());
+			List<String> linkedList = new LinkedList<>(insurance.getPhoneNumbers());
+			
+			long startArray = System.nanoTime();
+			arrayList.add("Test-Array");
+			arrayList.add("Test-Array");
+			arrayList.add("Test-Array");
+			long endArray = System.nanoTime();
+			
+			long startLinked = System.nanoTime();
+			linkedList.add("Test-Linked");
+			linkedList.add("Test-Linked");
+			linkedList.add("Test-Linked");
+			long endLinked = System.nanoTime();
+			
+			System.out.println("ArrayList operation time" +(endArray - startArray)+" ns");
+			System.out.println("LinkedList operation time" +(endLinked - startLinked)+" ns");
+
+		}
+		finally {
+			System.out.println("The finally block executes");
+
+		}
+		
+		if(insurance.getEmail() == null || !insurance.getEmail().contains("@"))
+		{
+			System.out.println("Insurance having invalid emial format");
+			throw new InsuranceNotFoundException("Insurance having invalid email format ot emial is null");
+			
+		}
+		
+		
+
 		if (insurance.getInsuranceType() == null) {
 			System.out.println("The customer doesnot have any Insurance");
 		}
@@ -74,6 +121,21 @@ public class Insuranceserviceimpl implements Insuranceservice{
 		// TODO Auto-generated method stub
 		
 		List<Insurance> insurance = insurancerepository.findAll();
+		
+		Map<String,List<Insurance>> hashMap = new HashMap<>();
+		Map<String,List<Insurance>> linkedhashMap = new LinkedHashMap<>();
+		Map<String,List<Insurance>> treeMap = new TreeMap<>();
+		
+		for(Insurance i:insurance) {
+			String domain = i.getEmail().split("@")[1];
+			hashMap.computeIfAbsent(domain, k -> new ArrayList<>()).add(i);
+			linkedhashMap.computeIfAbsent(domain, k -> new ArrayList<>()).add(i);
+			treeMap.computeIfAbsent(domain, k -> new ArrayList<>()).add(i);
+		}
+		System.out.println("HashMap " + hashMap.keySet());
+		System.out.println("LinkedHashMap " + linkedhashMap.keySet());
+		System.out.println("TreeMap " + treeMap.keySet());
+
 		if (insurance.isEmpty()) {
 			System.out.println("There are no Insurances found");
 		}
@@ -90,12 +152,35 @@ public class Insuranceserviceimpl implements Insuranceservice{
 	@Override
 	public Insurance updateInsurance(Insurance insurance) {
 		// TODO Auto-generated method stub
+		
+		Optional<Insurance> l= insurancerepository.findById(insurance.getInsuranceId());
+		if(l.isEmpty()) {
+			throw new InsuranceNotFoundException("Loan not found");
+			
+		}
+		
+		
+		
+		
+		Set<String> rawSet = insurance.getInsuranceTypes();
+		rawSet.removeIf(type -> type == null || type.trim().isEmpty());
+		Set<String> hashSet = new HashSet<>(rawSet);
+		System.out.println("hashSet:" + hashSet);
+		
+		Set<String> linkedhashSet = new LinkedHashSet<>(rawSet);
+		System.out.println("linkedhashSet:" + linkedhashSet);
+		
+		Set<String> treeSet = new TreeSet<>(rawSet);
+		System.out.println("TreeSet:" + treeSet);
+
 		return null;
 	}
 
 	@Override
 	public Insurance deleteInsurance(Long insuranceId) {
 		// TODO Auto-generated method stub
+		
+		insurancerepository.deleteById(insuranceId);
 		return null;
 	}
 
