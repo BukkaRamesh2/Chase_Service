@@ -1,14 +1,23 @@
 package com.chase.TransactionService;
 
+import com.chase.TransactionRepository.TransactionRepository;
 import com.chase.entity.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
 public class TransactionServiceImpl implements TransactionService {
+	
+	@Autowired
+    TransactionRepository transactionRepository;
+	
 
     private List<Transaction> transactionDatabase = new ArrayList<>();
-    private static int idCounter = 1;
+    private static Long idCounter = 1L;
 
     // Create a new transaction with basic checks
     public Transaction createTransaction(Transaction transaction) {
@@ -28,11 +37,11 @@ public class TransactionServiceImpl implements TransactionService {
         transactionDatabase.add(transaction);
 
         System.out.println("Transaction created successfully: ID = " + transaction.getTransactionId());
-        return transaction;
+        return transactionRepository.save(transaction);
     }
 
     // Retrieve a transaction by ID
-    public Transaction getTransactionById(long transactionID) {
+    public Transaction getTransactionById(Long transactionID) {
         for (Transaction txn : transactionDatabase) {
             if (txn.getTransactionId() == transactionID) {
                 return txn;
@@ -41,7 +50,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         // Decision-making logic
         System.out.println("Transaction not found with ID: " + transactionID);
-        return null;
+        return transactionRepository.getById(transactionID);
     }
 
     // Get all transactions
@@ -51,22 +60,36 @@ public class TransactionServiceImpl implements TransactionService {
             System.out.println("No transactions available.");
         }
 
-        return transactionDatabase;
+        return null;
     }
 
 	@Override
-	public Transaction updateTransaction(int id, Transaction transaction) {
+	public Transaction updateTransaction(Transaction transaction) {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
+		for (int i = 0; i < transactionDatabase.size(); i++) {
+            if (transactionDatabase.get(i).getTransactionId().equals(transaction.getTransactionId())) {
+            	transactionDatabase.set(i, transaction);
+                System.out.println("Transaction updated: ID = " + transaction.getTransactionId());
+                return transactionRepository.save(transaction);
+            }
+        }
+        System.out.println("Transaction not found for update: ID = " + transaction.getTransactionId());
+        return null;
+    }
 	@Override
-	public Transaction deleteTransaction(int id) {
+	public Transaction deleteTransaction(Long id) {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-
+		for (Transaction txn : transactionDatabase) {
+            if (txn.getTransactionId().equals(id)) {
+            	transactionDatabase.remove(txn);
+                System.out.println("Transaction deleted: ID = " + id);
+                transactionRepository.deleteById(id);
+                return txn;
+            }
+        }
+        System.out.println("Transaction not found for deletion: ID = " + id);
+        return null;
+    }
 	
 	
 
