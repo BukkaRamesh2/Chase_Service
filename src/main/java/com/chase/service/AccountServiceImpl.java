@@ -12,40 +12,52 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.chase.entity.Account;
 import com.chase.reposiroty.AccountRepository;
 import com.chase.util.AccountNotFoundException;
+import com.chase.util.AccountStatusCheckService;
 import com.chase.util.AccountStatusCheckTask;
 
 @Service
 public class AccountServiceImpl implements AccountService {
 	
+	private static final Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
+	
 	@Autowired
 	AccountRepository accountRepository;
+	
+	@Autowired
+	AccountStatusCheckService accountStatusCheckService;
 
 	@Override
 	public Account createAccount(Account account){
+		
+		//this will trigger async task
+		accountStatusCheckService.checkStatus(account.getAccountId(), account.isActive());
+		
 		boolean isValid = true;
 		if (account.getCustomerId() == null || account.getCustomerId() <= 0) {
-	        System.out.println("Invalid Customer ID.");
+			logger.error("Invalid Customer ID.");
 	        isValid = false;
 	    }
 
 	    if (account.getRoutingNumber() == null || !account.getRoutingNumber().matches("^\\d{9}$")) {
-	        System.out.println("Routing number must be a 9-digit number.");
+	    	logger.error("Routing number must be a 9-digit number.");
 	        isValid = false;
 	    }
 
 	    if (account.getBalance() == null || account.getBalance() < 0) {
-	        System.out.println("Invalid account balance");
+	    	logger.error("Invalid account balance");
 	        isValid = false;
 	    }
 
 	    if (account.getAccountType() == null) {
-	        System.out.println("Account type cannot be null.");
+	    	logger.error("Account type cannot be null.");
 	        isValid = false;
 	    }
 	    if (account.getTransactionIds() == null) {
@@ -59,7 +71,7 @@ public class AccountServiceImpl implements AccountService {
 	    }
 
 	    if (!isValid) {
-	        System.out.println("Account creation failed due to invalid input.");
+	    	logger.info("Account creation failed due to invalid input.");
 	        throw new IllegalArgumentException("Something in Account details is null");
 	    }
 	    
@@ -82,8 +94,8 @@ public class AccountServiceImpl implements AccountService {
 		    linkedList.add("LinkedUser3");
 		    long endLinked = System.nanoTime();
 	
-		    System.out.println("ArrayList add operation time: " + (endArray - startArray) + " ns");
-		    System.out.println("LinkedList add operation time: " + (endLinked - startLinked) + " ns");
+		    logger.info("ArrayList add operation time: " + (endArray - startArray) + " ns");
+		    logger.info("LinkedList add operation time: " + (endLinked - startLinked) + " ns");
 		    
 	    }catch(Exception e){
 	    	e.printStackTrace();
@@ -99,7 +111,7 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public Account getAccount(Long accountId) {
 		if (accountId == null || accountId <= 0) {
-	        System.out.println("Invalid account ID provided.");
+			logger.error("Invalid account ID provided.");
 	        throw new AccountNotFoundException();
 	    }
 		return accountRepository.getById(accountId);
@@ -109,11 +121,11 @@ public class AccountServiceImpl implements AccountService {
 	public List<Account> getAllAccounts() {
 		 List<Account> accounts = accountRepository.findAll();
 		    if (accounts.isEmpty()) {
-		        System.out.println("No accounts found in the database.");
+		    	logger.info("No accounts found in the database.");
 		    } else {
 		    	accounts.forEach(account -> {
 		            if (account.isActive()) {
-		                System.out.println("Account ID " + account.getAccountId() + " is active.");
+		            	logger.info("Account ID " + account.getAccountId() + " is active.");
 		            }
 		        });
 		    	
@@ -131,9 +143,9 @@ public class AccountServiceImpl implements AccountService {
 		            treeMap.computeIfAbsent(routingNum, k -> new ArrayList<>()).add(account);
 		        }
 
-		        System.out.println("HashMap keys (routing numbers): " + hashMap.keySet());
-		        System.out.println("LinkedHashMap keys (routing numbers): " + linkedHashMap.keySet());
-		        System.out.println("TreeMap keys (routing numbers): " + treeMap.keySet());
+		        logger.info("HashMap keys (routing numbers): " + hashMap.keySet());
+		        logger.info("LinkedHashMap keys (routing numbers): " + linkedHashMap.keySet());
+		        logger.info("TreeMap keys (routing numbers): " + treeMap.keySet());
 		        
 		    }
 		    return accounts;
@@ -142,12 +154,12 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public Account updateAccount(Account account) {
 		if (account == null || account.getAccountId() == null) {
-			System.out.println("Account or Account ID cannot be null.");
+			logger.error("Account or Account ID cannot be null.");
 			throw new AccountNotFoundException("Account not found");
 	    }
 
 	    if (!accountRepository.existsById(account.getAccountId())) {
-	    	System.out.println("Account not found with ID: " + account.getAccountId());
+	    	logger.error("Account not found with ID: " + account.getAccountId());
 	    	return null;
 	    }
 
@@ -168,9 +180,9 @@ public class AccountServiceImpl implements AccountService {
 	    Set<String> linkedHashSet = new LinkedHashSet<>(rawSet);
 	    Set<String> treeSet = new TreeSet<>(rawSet);
 	    
-	    System.out.println("HashSet (unordered): " + hashSet);
-	    System.out.println("LinkedHashSet (insertion order): " + linkedHashSet);
-	    System.out.println("TreeSet (sorted order): " + treeSet);
+	    logger.info("HashSet (unordered): " + hashSet);
+	    logger.info("LinkedHashSet (insertion order): " + linkedHashSet);
+	    logger.info("TreeSet (sorted order): " + treeSet);
 	    
 	    return accountRepository.save(account);
 	}
@@ -208,7 +220,7 @@ public class AccountServiceImpl implements AccountService {
 	public Account addTransactionId(Long accountId, Long transactionId) {
 	    Account account = accountRepository.findById(accountId).orElse(null);
 	    if (account == null) {
-	        System.out.println("Account not found.");
+	    	logger.error("Account not found.");
 	        return null;
 	    }
 	    account.getTransactionIds().add(transactionId);
@@ -217,7 +229,7 @@ public class AccountServiceImpl implements AccountService {
 	public Account addAuthorizedUser(Long accountId, String userEmail) {
 	    Account account = accountRepository.findById(accountId).orElse(null);
 	    if (account == null) {
-	        System.out.println("Account not found.");
+	    	logger.error("Account not found.");
 	        return null;
 	    }
 	    account.getAuthorizedUsers().add(userEmail);
@@ -227,7 +239,7 @@ public class AccountServiceImpl implements AccountService {
 	public Account updateAccountLimit(Long accountId, String limitType, Double limitValue) {
 	    Account account = accountRepository.findById(accountId).orElse(null);
 	    if (account == null) {
-	        System.out.println("Account not found.");
+	    	logger.error("Account not found.");
 	        return null;
 	    }
 	    account.getAccountLimits().put(limitType, limitValue);
