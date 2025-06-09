@@ -1,28 +1,26 @@
 package com.chase.util;
 
+
+
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice
 public class globalexceptionhandler {
 
-	@ExceptionHandler(branchnotfoundexception.class)
-	public String cardnotfoundexception(branchnotfoundexception ex) {
-        return ex.getMessage();
+    @ExceptionHandler(branchnotfoundexception.class)
+    public ResponseEntity<String> handleBranchNotFoundException(branchnotfoundexception ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
-	
-	@ExceptionHandler(IllegalArgumentException.class)
-	public static ResponseEntity<String> IllegalArgumentException(IllegalArgumentException ex) {
-        return new ResponseEntity<>("Bad Request "+ ex.getMessage(),HttpStatus.BAD_REQUEST);
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return new ResponseEntity<>("Bad Request: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
-	
-	@ExceptionHandler(ArithmeticException.class)
-	public ResponseEntity<String> ArithmeticException(ArithmeticException ex) {
-        return new ResponseEntity<>("Wrong Formula "+ ex.getMessage(),HttpStatus.METHOD_FAILURE);
+
+    @ExceptionHandler(ArithmeticException.class)
+    public ResponseEntity<String> handleArithmeticException(ArithmeticException ex) {
+        return new ResponseEntity<>("Calculation Error: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-	
-	
-	
 }
