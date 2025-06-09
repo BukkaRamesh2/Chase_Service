@@ -11,12 +11,12 @@ public class emailtask {
 	private static final Logger logger = LoggerFactory.getLogger(emailtask.class);
 	
    @Async("taskExecutor")
-	public void sendWelcomeMail(String loantype, String loanemail) {
+	public void sendWelcomeMail(String cardtype, String cardemail) {
 		// TODO Auto-generated method stub
 		try {
-			logger.info("in emailtask class sending welcome loantype to :" + loantype +" email:" + loanemail);
+			logger.info("in emailtask class sending welcome cardtype to :" + cardtype +" email:" + cardemail);
 			Thread.sleep(3000);
-			logger.info(" in email task loantype send to "+ loantype +" at" +loanemail);
+			logger.info(" in email task cardtype send to "+ cardtype +" at" +cardemail);
 		}
 		catch(InterruptedException e) {
 			logger.info("loantype sending got an exception:");

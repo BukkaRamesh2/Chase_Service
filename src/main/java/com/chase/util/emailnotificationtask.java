@@ -2,14 +2,14 @@ package com.chase.util;
 
 public class emailnotificationtask implements Runnable {
 
-	private final String loantype;
-	private final String loanemail;
+	private final String Cardtype;
+	private final String Cardemail;
 	
 	
-	public emailnotificationtask(String loantype, String loanemail) {
+	public emailnotificationtask(String cardtype, String cardemail) {
 		super();
-		this.loantype = loantype;
-		this.loanemail = loanemail;
+		this.Cardtype = cardtype;
+		this.Cardemail = cardemail;
 	}
 
 
@@ -17,14 +17,24 @@ public class emailnotificationtask implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
-			System.out.println("sending welcome loantype to :" + loantype +" email:" + loanemail);
+			System.out.println("sending welcome cardtype to :" + Cardtype +" email:" + Cardemail);
 			Thread.sleep(3000);
-			System.out.println("loantype send to "+ loantype +" at" +loanemail);
+			System.out.println("cardtype send to "+ Cardtype +" at" +Cardemail);
 		}
 		catch(InterruptedException e) {
-			System.out.println("loantype sending got an exception:");
+			System.out.println("cardtype sending got an exception:");
 			Thread.currentThread().interrupt();		
 			}
 		
+	}
+
+
+	public String getCardtype() {
+		return Cardtype;
+	}
+
+
+	public String getCardemail() {
+		return Cardemail;
 	}
 }

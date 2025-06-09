@@ -1,12 +1,12 @@
 package com.chase.util;
 
 public class fraudchecktask implements Runnable{
-	public final String loanemail;
+	public String cardemail = "";
 	
 
-	public fraudchecktask(String loanemail) {
+	public fraudchecktask(String loanemail, String cardemail) {
 		super();
-		this.loanemail = loanemail;
+		this.cardemail = cardemail;
 	}
 
 
@@ -14,12 +14,12 @@ public class fraudchecktask implements Runnable{
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
-			System.out.println("sending welcome loanemail:hello" + loanemail);
+			System.out.println("sending welcome cardemail:hello" + cardemail);
 			Thread.sleep(3000);
-			System.out.println("loanemail send to " +loanemail);
+			System.out.println("cardemail send to " +cardemail);
 		}
 		catch(InterruptedException e) {
-			System.out.println("loanemail sending got an exception:");
+			System.out.println("cardemail sending got an exception:");
 			Thread.currentThread().interrupt();		
 			}
 		
