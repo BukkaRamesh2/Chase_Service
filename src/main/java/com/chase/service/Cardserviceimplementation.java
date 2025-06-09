@@ -14,8 +14,7 @@ public class Cardserviceimplementation implements Cardservice {
     @Autowired
     cardrepository cardRepository;
 
-    public Cardserviceimplementation() {
-    }
+    public Cardserviceimplementation() {}
 
     @Override
     public Card addCard(Card card) {
@@ -80,7 +79,6 @@ public class Cardserviceimplementation implements Cardservice {
             return cards;
         }
 
-        // Group cards by status
         Map<String, List<Card>> statusMap = new HashMap<>();
         Map<String, List<Card>> linkedStatusMap = new LinkedHashMap<>();
         Map<String, List<Card>> sortedStatusMap = new TreeMap<>();
@@ -97,7 +95,6 @@ public class Cardserviceimplementation implements Cardservice {
         System.out.println("LinkedHashMap (Status): " + linkedStatusMap.keySet());
         System.out.println("TreeMap (Status): " + sortedStatusMap.keySet());
 
-     
         Set<String> hashSet = new HashSet<>();
         Set<String> linkedHashSet = new LinkedHashSet<>();
         Set<String> treeSet = new TreeSet<>();
