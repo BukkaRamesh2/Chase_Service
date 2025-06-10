@@ -1,5 +1,7 @@
 package com.chase.util;
 
+import org.springframework.stereotype.Component;
+
 public class FraudCheckTask implements Runnable {
 
 	private final String customerEmail;

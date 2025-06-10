@@ -2,6 +2,8 @@ package com.chase.controller;
 
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chase.Test;
@@ -17,6 +20,7 @@ import com.chase.entity.Customer;
 import com.chase.service.CustomerService;
 import com.chase.util.EmailNotificationTask;
 import com.chase.util.FraudCheckTask;
+import com.chase.util.JwtUtil;
 
 @RestController 
 @RequestMapping("/customer") 
@@ -98,24 +102,52 @@ public class CustomerController {
 		 * 
 		 *  test
 		 *  
+		 *  Authentication --  JWT token, Spring Security, Basic Auth oAuth, Role based access 
+		 *  Authorization -- What all the access are provided to users
 		 *  
 		 *  
-		 * 
+		 *  User X, Y, Z
+		 *  Role  --A, B, C
+		 *  User-Role
+		 *  X-A
+		 *  Y-B
+		 *  Z-A,C
+		 *  
+		 *  how to integrate any component 
+		 *  DI
+		 *  
+		 *  @Component 
+		 *  
+		 *  Add Dependency in POM 
+		 *  
+		 *  
+		 *  JWT 
+		 *  Get the library from Maven ccentreal REPO 
+		 *  
 		 * 
 		 * 
 		 */
 		
 	}
 	
+	JwtUtil jwtUtil;
+	
+	@PostMapping("/login")
+	public String login(@RequestParam String username, @RequestParam String password) {
+		if("admin".equals(username) && "admin123".equals(password)) {
+			return jwtUtil.generateToken(username);
+			
+		} else {
+			throw new RuntimeException("Invalid Credentails");
+		}
+	}
+	
 	@PostMapping("/addCustomer")    //
 	public Customer addCustomer(@RequestBody Customer customer) {
-		
+		// kick off fraud check	
         Runnable fraudCheckTask = new FraudCheckTask(customer.getEmail()); 
-		
 		new Thread(fraudCheckTask).start();  // thread will initate 
-		
 		 // porocced with actual logic to svae the data
-		
 		return custService.addCustomer(customer);
 	}
 	

@@ -2,6 +2,7 @@ package com.chase.service;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -14,14 +15,18 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.chase.controller.CustomerController;
 import com.chase.entity.Customer;
 import com.chase.reposiroty.CustomerRepository;
+import com.chase.util.CustomerEmailComparator;
 import com.chase.util.CustomerNotFoundException;
 import com.chase.util.EmailNotificationTask;
+import com.chase.util.EmailService;
 
 /*
  * 
@@ -105,15 +110,20 @@ import com.chase.util.EmailNotificationTask;
 @Service
 public class CustomerServiceImpl implements CustomerService{
 	
+    private static final Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
+
+	@Autowired
+	CustomerRepository customerRepository; 
 	
 	@Autowired
-	CustomerRepository customerRepository;   
+	EmailService emailService;
 	
 
 	@Override
 	public Customer addCustomer(Customer customer) {
 		
-		
+		// this will trigger async task 
+		emailService.sendWelcomeEmail(customer.getFirstName(), customer.getEmail()); 
 		
 		// arraylist linkedlist 
 		// get currrent time in ns before
@@ -145,7 +155,7 @@ public class CustomerServiceImpl implements CustomerService{
 		LinkedList.add("Test-Linked");
 		long endLinked = System.nanoTime();
 		
-		System.out.println("ArrayList operation time: " +(endArray - startArray) + "ns");
+		logger.info("ArrayList operation time: " +(endArray - startArray) + "ns");
 		System.out.println("LinkedList operation time: " +(endLinked - startLinked) + "ns");
 		
 		}catch(Exception e ) {
@@ -162,7 +172,6 @@ public class CustomerServiceImpl implements CustomerService{
 		}
 		
 		Runnable emailTask = new EmailNotificationTask(customer.getEmail(), customer.getFirstName()); 
-		
 		new Thread(emailTask).start();  // thread will initate 
 		
 		
@@ -252,6 +261,8 @@ public class CustomerServiceImpl implements CustomerService{
 					System.out.println("All the customers returning are status active");
 				}
 			});
+			Collections.sort(customers);  // sort by firstname
+			customers.sort(new CustomerEmailComparator());  // sort by email
 			return customers;
 		}
 		

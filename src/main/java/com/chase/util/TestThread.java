@@ -39,6 +39,7 @@ public class TestThread extends Thread{
 	public static void main(String[] args) {
 		TestThread t1 = new TestThread("Thread-1");
 		TestThread t2 = new TestThread("Thread-2");
+		
 		t1.start();
 		t2.start();
 	}

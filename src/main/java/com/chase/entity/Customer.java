@@ -26,7 +26,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Customer {
+public class Customer implements Comparable<Customer>{
 
 	public Customer() {
 		// TODO Auto-generated constructor stub
@@ -218,7 +218,29 @@ public class Customer {
     "SAVINGS": 1000.50,
     "CHECKING": 200.75
   }
-}        
+}      
+
+  
+  {
+  "firstName": "alex",
+  "lastName": "San",
+  "address": "TX",
+  "email": "Alex.San@gmail.com",
+  "mobileNumber": 12321323,
+  "status": true,
+  "fullName": "Alex San",
+  "gender": "Male",
+  "phoneNumbers": [
+    "122312312"
+  ],
+  "accountBalances": {
+    "SAVINGS": 1000.50,
+    "CHECKING": 200.75
+  },
+  "accountTypes": [
+    "Savings", "CHECKING"
+  ]
+}
 	 *      Checked Exception  -- CompileTime Exception  -- CustomerNotFoundException
 	 *      Unchecked Exception --  RunTime Exception  -- IllegalArgumentException, DataCorruptionException
 	 *      ArrayIndexOutOfBoundException 
@@ -255,6 +277,21 @@ public class Customer {
 	 *          throws   -- this is more used at method level exception 
 	 *          finally  -- 
 	 *          
+	 *      
+	 *      
+	 *      
+	 *      Comparable and comparator 
+	 *      
+	 *      Comaparable  -- its used for natural sorying order of objects with in the class
+	 *      comparator -- custom sorting externally 
+	 *      
+	 *      
+	 *      comparable -- will do onlu  single single comparision ,, class level
+	 *      comparator -- with multipe varaibles comparsingon ,, method level;
+	 *      
+	 *      compareTo()  -- in both this is checking for comparision 
+	 *      
+	 *      
 	 *      
 	 *      
 	 *      
@@ -460,6 +497,13 @@ public class Customer {
 				&& Objects.equals(gender, other.gender) && Objects.equals(id, other.id)
 				&& Objects.equals(lastName, other.lastName) && Objects.equals(mobileNumber, other.mobileNumber)
 				&& status == other.status;
+	}
+
+
+	@Override
+	public int compareTo(Customer o) {
+		// TODO Auto-generated method stub
+		return this.firstName.compareToIgnoreCase(o.getFirstName());
 	}
 	   
 	   

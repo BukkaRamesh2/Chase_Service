@@ -1,5 +1,8 @@
 package com.chase.util;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class DataCorruptionException extends RuntimeException {
 
 	private static final long serialVersionUID = 973851234495595804L;
