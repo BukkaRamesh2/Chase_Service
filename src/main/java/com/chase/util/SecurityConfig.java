@@ -20,7 +20,14 @@ public class SecurityConfig {
 	public SecurityFilterChain  filterChain(HttpSecurity http) throws Exception{
 		http.csrf().disable()
 		.authorizeHttpRequests()
-		.requestMatchers("/customer/login").permitAll()
+		.requestMatchers("/customer/login",
+				"swagger-ui/index.html",
+				"swagger-ui/**",
+				"swagger-ui/index.html#/customer-controller/**",
+				"/h2-console/login.jsp/**",
+				"/h2-console/login.do?jsessionid/**",
+				"/h2-console/test.do?jsessionid/**",
+				"/customer/**").permitAll()
 		.anyRequest().authenticated()
 		.and()
 		.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

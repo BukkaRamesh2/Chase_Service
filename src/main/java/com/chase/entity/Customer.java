@@ -28,9 +28,7 @@ import lombok.Setter;
 @Setter
 public class Customer implements Comparable<Customer>{
 
-	public Customer() {
-		// TODO Auto-generated constructor stub
-	}
+	
 	
 	
 	public Customer(String string) {

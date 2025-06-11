@@ -152,20 +152,24 @@ Branches   -- Prudhvi
 
 
 */
-public class Test extends Customer{
-
-	public static void main(String[] args) {
-		Customer cust = new Customer();  // 
-		
-		
-	}
-	
-	public void test() {
-		System.out.println("print messgae from test");
-	}
-	
-	public void displayUser() {
-		System.out.println("This message is from test class");
-	}
-
-}
+//public class Test extends Customer{
+//
+//	
+//	public Test(String string) {
+//		super(string);
+//		// TODO Auto-generated constructor stub
+//	}
+//
+//	public Test() {
+//		// TODO Auto-generated constructor stub
+//	}
+//
+//	public void test() {
+//		System.out.println("print messgae from test");
+//	}
+//	
+//	public void displayUser() {
+//		System.out.println("This message is from test class");
+//	}
+//
+//}
