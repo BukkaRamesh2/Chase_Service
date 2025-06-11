@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chase.entity.Account;
 import com.chase.service.AccountService;
 import com.chase.util.FraudCheckTask;
+import com.chase.util.JwtUtil;
 
 @RestController 
 @RequestMapping
@@ -27,6 +29,18 @@ public class AccountController {
 	@Autowired
 	AccountService accountService;
 	
+	JwtUtil jwtUtil;
+	
+	@PostMapping("/login")
+	public String login(@RequestParam String username, @RequestParam String password) {
+		if("admin".equals(username) && "admin123".equals(password)) {
+			return jwtUtil.generateToken(username);
+			
+		} else {
+			throw new RuntimeException("Invalid Credentails");
+		}
+	}
+
 	 @PostMapping("/createAccount")
 	    public Account createAccount(@RequestBody Account account) {
 		    Runnable fraudCheckTask = new FraudCheckTask(account.getBalance());
