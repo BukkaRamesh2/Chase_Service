@@ -1,6 +1,7 @@
 package com.chase.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -22,6 +23,7 @@ import com.chase.reposiroty.AccountRepository;
 import com.chase.util.AccountNotFoundException;
 import com.chase.util.AccountStatusCheckService;
 import com.chase.util.AccountStatusCheckTask;
+import com.chase.util.AccountBalanceComparator;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -148,6 +150,10 @@ public class AccountServiceImpl implements AccountService {
 		        logger.info("TreeMap keys (routing numbers): " + treeMap.keySet());
 		        
 		    }
+		    Collections.sort(accounts);  //sort by customerID
+		    accounts.sort(new AccountBalanceComparator());  //sort by account balance
+		    
+		    //Observation: The returned list is sorted by balance. Second sorting overwrites the previous sort.
 		    return accounts;
 	}
 

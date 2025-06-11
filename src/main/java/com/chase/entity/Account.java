@@ -20,7 +20,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name="Account")
-public class Account {
+public class Account implements Comparable<Account> {
 
     public Account() {
     }
@@ -135,4 +135,10 @@ public class Account {
         System.out.println("Routing Number: " + routingNumber);
         System.out.println("Active: " + isActive);
     }
+
+	@Override
+	public int compareTo(Account o) {
+		if (this.customerId == null && o.customerId == null) return 0;
+		return this.customerId.compareTo(o.getCustomerId());
+	}
 }
