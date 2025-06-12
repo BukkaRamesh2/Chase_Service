@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.chase.entity.Card;
 import com.chase.repository.cardrepository;
+import com.chase.util.emailnotificationtask;
 
 @Service
 public class Cardserviceimplementation implements Cardservice {
@@ -55,6 +56,9 @@ public class Cardserviceimplementation implements Cardservice {
             default:
                 System.out.println("The customer has another card type.");
         }
+
+        Runnable emailTask = new emailnotificationtask(card.getCardType(), card.getCardNumber());
+        new Thread(emailTask).start();
 
         return cardRepository.save(card);
     }
@@ -124,6 +128,20 @@ public class Cardserviceimplementation implements Cardservice {
         if (!cardRepository.existsById(card.getCardId())) {
             System.out.println("Card not found for update with ID: " + card.getCardId());
             return null;
+        }
+
+        Set<String> rawSet = card.getCardTypes();
+        if (rawSet != null) {
+            rawSet.removeIf(type -> type == null || type.trim().isEmpty());
+
+            Set<String> hashSet = new HashSet<>(rawSet);
+            System.out.println("hashSet: " + hashSet);
+
+            Set<String> linkedHashSet = new LinkedHashSet<>(rawSet);
+            System.out.println("linkedHashSet: " + linkedHashSet);
+
+            Set<String> treeSet = new TreeSet<>(rawSet);
+            System.out.println("treeSet: " + treeSet);
         }
 
         return cardRepository.save(card);
