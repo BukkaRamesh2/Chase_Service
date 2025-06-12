@@ -1,96 +1,117 @@
 package com.chase.TransactionService;
 
-import com.chase.TransactionRepository.TransactionRepository;
-import com.chase.entity.Transaction;
-
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.chase.TransactionRepository.TransactionRepository;
+import com.chase.entity.Transaction;
+import com.chase.util.EmailNotificationTask;
+import com.chase.util.EmailService;
+import com.chase.util.InvalidTransactionException;
+import com.chase.util.TransactionEmailComparator;
+import com.chase.util.TransactionNotFoundException;
+
 @Service
 public class TransactionServiceImpl implements TransactionService {
-	
-	@Autowired
-    TransactionRepository transactionRepository;
-	
 
+    @Autowired
+    TransactionRepository transactionRepository;
+    
+    @Autowired
+	EmailService emailService;
+    
+    
+    private static final Logger logger = LoggerFactory.getLogger(TransactionServiceImpl.class);
+	private final ExecutorService executorService = Executors.newFixedThreadPool(2);
+   
     private List<Transaction> transactionDatabase = new ArrayList<>();
     private static Long idCounter = 1L;
+    
+  
 
-    // Create a new transaction with basic checks
     public Transaction createTransaction(Transaction transaction) {
-        // Decision-making logic
+    	emailService.sendWelcomeMail(transaction.getName(), transaction.getEmail());
+    	
         if (transaction.getAmount() <= 0) {
-            System.out.println("Invalid transaction amount. Must be greater than zero.");
-            return null;
+            throw new InvalidTransactionException("Transaction amount must be greater than zero.");
         }
 
         if (transaction.getTransactionType() == null || transaction.getTransactionType().isEmpty()) {
-            System.out.println("Transaction type is required.");
-            return null;
+            throw new InvalidTransactionException("Transaction type is required.");
         }
 
-        // Assign a transaction ID manually (simulating auto-increment)
         transaction.setTransactionId(idCounter++);
         transactionDatabase.add(transaction);
-
-        System.out.println("Transaction created successfully: ID = " + transaction.getTransactionId());
+        
+        //if email is null and email does not contain @ invalid format 
+        if(transaction.getEmail() == null || !transaction.getEmail().contains("@"))
+		{
+			System.out.println("Loan having invalid emial format");
+			throw new TransactionNotFoundException("Employee having invalid email format ot emial is null");
+		}
+        
+        
+        //creating thread for emailNotification  
+      //  Runnable emailTask =new EmailNotificationTask(transaction.getEmail(),transaction.getName());
+        // new Thread(emailTask).start();
+         
+         
+        
         return transactionRepository.save(transaction);
     }
 
-    // Retrieve a transaction by ID
     public Transaction getTransactionById(Long transactionID) {
-        for (Transaction txn : transactionDatabase) {
-            if (txn.getTransactionId() == transactionID) {
-                return txn;
-            }
-        }
-
-        // Decision-making logic
-        System.out.println("Transaction not found with ID: " + transactionID);
-        return transactionRepository.getById(transactionID);
+        return transactionDatabase.stream()
+            .filter(txn -> txn.getTransactionId().equals(transactionID))
+            .findFirst()
+            .orElseThrow(() -> new TransactionNotFoundException("Transaction not found with ID: " + transactionID));
     }
 
-    // Get all transactions
     public List<Transaction> getAllTransactions() {
-        // Decision-making
+    	
+    	  List<Transaction> transcation =  transactionRepository.findAll();
+    	  
         if (transactionDatabase.isEmpty()) {
-            System.out.println("No transactions available.");
+            throw new TransactionNotFoundException("No transactions available.");
         }
+        
+        
+      //Collections.sort(transcation);// sort by firstname
+       transcation.sort(new TransactionEmailComparator()); //this will sort by email
 
-        return null;
+        return transactionDatabase;
     }
 
-	@Override
-	public Transaction updateTransaction(Transaction transaction) {
-		// TODO Auto-generated method stub
-		for (int i = 0; i < transactionDatabase.size(); i++) {
+    @Override
+    public Transaction updateTransaction(Transaction transaction) {
+        for (int i = 0; i < transactionDatabase.size(); i++) {
             if (transactionDatabase.get(i).getTransactionId().equals(transaction.getTransactionId())) {
-            	transactionDatabase.set(i, transaction);
-                System.out.println("Transaction updated: ID = " + transaction.getTransactionId());
+                transactionDatabase.set(i, transaction);
                 return transactionRepository.save(transaction);
             }
         }
-        System.out.println("Transaction not found for update: ID = " + transaction.getTransactionId());
-        return null;
+        throw new TransactionNotFoundException("Transaction not found for update: ID = " + transaction.getTransactionId());
     }
-	@Override
-	public Transaction deleteTransaction(Long id) {
-		// TODO Auto-generated method stub
-		for (Transaction txn : transactionDatabase) {
+
+    @Override
+    public Transaction deleteTransaction(Long id) {
+        for (Transaction txn : transactionDatabase) {
             if (txn.getTransactionId().equals(id)) {
-            	transactionDatabase.remove(txn);
-                System.out.println("Transaction deleted: ID = " + id);
+                transactionDatabase.remove(txn);
                 transactionRepository.deleteById(id);
                 return txn;
             }
         }
-        System.out.println("Transaction not found for deletion: ID = " + id);
-        return null;
+        throw new TransactionNotFoundException("Transaction not found for deletion: ID = " + id);
     }
-	
-	
 
+	
 }
