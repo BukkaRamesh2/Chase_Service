@@ -1,6 +1,8 @@
 package com.chase.util;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +24,8 @@ public class JwtFilter extends OncePerRequestFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+
+		System.out.println("Request URI: " + request.getRequestURI());
 		
 		String header = request.getHeader("Authorization");
 		if(header != null && header.startsWith("Bearer ")) {
@@ -29,7 +33,7 @@ public class JwtFilter extends OncePerRequestFilter{
 			String token = header.substring(7);
 			if(jwtUtil.validateToken(token)) {
 				String username = jwtUtil.extractUserName(token);
-				UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null);
+				UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
 				SecurityContextHolder.getContext().setAuthentication(auth);
 			}
 			

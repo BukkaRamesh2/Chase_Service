@@ -29,6 +29,7 @@ public class AccountController {
 	@Autowired
 	AccountService accountService;
 	
+	@Autowired
 	JwtUtil jwtUtil;
 	
 	@PostMapping("/login")

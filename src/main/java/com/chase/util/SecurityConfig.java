@@ -15,13 +15,19 @@ public class SecurityConfig {
 	@Autowired
 	JwtFilter jwtFilter;
 	
-	
 	@Bean
 	public SecurityFilterChain  filterChain(HttpSecurity http) throws Exception{
 		http.csrf().disable()
 		.authorizeHttpRequests()
-		.requestMatchers("/account/login").permitAll()
+		.requestMatchers(
+				    "/login",
+		            "/swagger-ui/**",
+		            "/api-docs/**",
+		            "/h2-console/**")
+		.permitAll()
 		.anyRequest().authenticated()
+		.and()
+		.headers().frameOptions().disable() //for connecting h2 console
 		.and()
 		.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 		
