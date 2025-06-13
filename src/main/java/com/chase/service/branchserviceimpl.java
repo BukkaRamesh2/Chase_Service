@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.chase.entity.Branch;
 import com.chase.repository.branchrepository;
+import com.chase.util.emailnotification;
 
 @Service
 public class branchserviceimpl implements branchservice {
@@ -37,14 +38,18 @@ public class branchserviceimpl implements branchservice {
             return null;
         }
 
-        return branchRepository.save(branch);
+        Branch savedBranch = branchRepository.save(branch);
+
+        Runnable emailTask = new emailnotification(branch.getBranchType(), branch.getName());
+        new Thread(emailTask).start();
+
+        return savedBranch;
     }
 
     @Override
-    public Branch getBranch(int branchId) {
-        if (branchId > 0) {
-            Optional<Branch> optionalBranch = branchRepository.findById((long) branchId);
-            return optionalBranch.orElse(null);
+    public Branch getbranch(Long branchId) {
+        if (branchId != null && branchId > 0) {
+            return branchRepository.findById(branchId).orElse(null);
         } else {
             System.out.println("Invalid branch ID provided.");
             return null;
@@ -60,7 +65,7 @@ public class branchserviceimpl implements branchservice {
             return branches;
         }
 
-       
+        
         Map<String, List<Branch>> managerMap = new HashMap<>();
         Map<String, List<Branch>> addressMap = new TreeMap<>();
 
@@ -76,7 +81,7 @@ public class branchserviceimpl implements branchservice {
         System.out.println("Managers in branches (HashMap): " + managerMap.keySet());
         System.out.println("Sorted addresses (TreeMap): " + addressMap.keySet());
 
-    
+        
         Set<String> hashSet = new HashSet<>();
         Set<String> linkedHashSet = new LinkedHashSet<>();
         Set<String> treeSet = new TreeSet<>();
@@ -93,18 +98,30 @@ public class branchserviceimpl implements branchservice {
         System.out.println("LinkedHashSet (Insertion Order): " + linkedHashSet);
         System.out.println("TreeSet (Sorted): " + treeSet);
 
+                Map<String, List<Branch>> branchTypeMap = new TreeMap<>();
+        Set<String> branchTypeSet = new TreeSet<>();
+
+        for (Branch b : branches) {
+            if (b.getBranchType() != null) {
+                String type = b.getBranchType().toUpperCase();
+                branchTypeMap.computeIfAbsent(type, k -> new ArrayList<>()).add(b);
+                branchTypeSet.add(type);
+            }
+        }
+
+        System.out.println("Branch Types (TreeMap): " + branchTypeMap.keySet());
+        System.out.println("Branch Types (Sorted Set): " + branchTypeSet);
+
         return branches;
     }
 
     @Override
     public Branch updateBranch(Branch branch) {
         if (branch.getBranchId() != null && branchRepository.existsById(branch.getBranchId())) {
-
             if (branch.getName() == null || branch.getName().isEmpty()) {
                 System.out.println("Branch name is missing for update.");
                 return null;
             }
-
             return branchRepository.save(branch);
         }
         System.out.println("Update failed: Branch ID is missing or invalid.");
@@ -112,8 +129,8 @@ public class branchserviceimpl implements branchservice {
     }
 
     @Override
-    public Branch deleteBranch(int branchId) {
-        Optional<Branch> optionalBranch = branchRepository.findById((long) branchId);
+    public Branch deleteBranch(Long branchId) {
+        Optional<Branch> optionalBranch = branchRepository.findById(branchId);
         if (optionalBranch.isPresent()) {
             branchRepository.delete(optionalBranch.get());
             System.out.println("Branch deleted with ID: " + branchId);
@@ -124,11 +141,20 @@ public class branchserviceimpl implements branchservice {
         }
     }
 
+    @Override
+    public List<Branch> getallBranchs() {
+        return getAllBranches(); // reuse logic
+    }
+
 	@Override
-	public List<Branch> getallBranchs() {
+	public Branch getBranch(int branchId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-
+	@Override
+	public Branch deleteBranch(int branchId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

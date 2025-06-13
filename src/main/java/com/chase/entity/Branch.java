@@ -1,11 +1,6 @@
 package com.chase.entity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -21,14 +16,15 @@ public class Branch {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long branchId;
+
     private String name;
     private String address;
     private String manager;
     private int code;
     private float timings;
-
     private String email;
-    protected String bankName;
+    private String bankName;
+    private String branchType;  
 
     @ElementCollection
     private List<String> servicesOffered = new ArrayList<>();
@@ -51,12 +47,19 @@ public class Branch {
         this.timings = timings;
     }
 
+    // Getters and Setters
+
     public Long getBranchId() {
         return branchId;
     }
 
     public void setBranchId(Long branchId) {
         this.branchId = branchId;
+    }
+
+    // ✅ Optional overload for String input
+    public void setBranchId(String branchIdAsString) {
+        this.branchId = Long.parseLong(branchIdAsString);
     }
 
     public String getName() {
@@ -113,6 +116,14 @@ public class Branch {
 
     public void setBankName(String bankName) {
         this.bankName = bankName;
+    }
+
+    public String getBranchType() {
+        return branchType;
+    }
+
+    public void setBranchType(String branchType) {
+        this.branchType = branchType;
     }
 
     public List<String> getServicesOffered() {
