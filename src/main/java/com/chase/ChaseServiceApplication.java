@@ -1,9 +1,9 @@
-package com.chase;
+package com.chase; //means this class is part of com.chase package
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication //
 public class ChaseServiceApplication {
 
 	public static void main(String[] args) {
