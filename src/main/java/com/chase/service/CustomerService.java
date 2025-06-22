@@ -12,6 +12,8 @@ public interface CustomerService {
 	public List<Customer> getAllCustomers();
 	public Customer updateCustomer(Customer customer);
 	public void deleteCustomer(Long customerId);
+	public String callPncService();
+	public String callPncService1();
 	
 
 }

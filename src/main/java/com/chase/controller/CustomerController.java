@@ -168,5 +168,10 @@ public class CustomerController {
 		 custService.deleteCustomer(customerId);
 	}
 	
+	@GetMapping("/callAnotherService")
+	public String getPncDetails() {
+		return custService.callPncService();
+	}
+	
 
 }
