@@ -84,6 +84,13 @@ public class AccountController {
 	        accountService.transfer(fromAccountId, toAccountId, amount);
 	    }
 	    
+	    @GetMapping("/callAnotherService")
+	    public String getPncDetails() {
+	    	return accountService.callPncService1();
+	    }
+	    
+	    
+	    
 	    
 	    
 	    

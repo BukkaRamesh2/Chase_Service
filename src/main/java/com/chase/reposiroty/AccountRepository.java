@@ -7,5 +7,4 @@ import com.chase.entity.Account;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long>{
-
 }

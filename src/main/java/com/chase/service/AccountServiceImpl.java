@@ -17,12 +17,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.chase.entity.Account;
 import com.chase.reposiroty.AccountRepository;
 import com.chase.util.AccountNotFoundException;
 import com.chase.util.AccountStatusCheckService;
 import com.chase.util.AccountStatusCheckTask;
+import com.chase.util.RestTemplateConfig;
 import com.chase.util.AccountBalanceComparator;
 
 @Service
@@ -35,6 +38,12 @@ public class AccountServiceImpl implements AccountService {
 	
 	@Autowired
 	AccountStatusCheckService accountStatusCheckService;
+	
+	@Autowired
+	RestTemplate restTemplate;
+	
+	@Autowired
+	WebClient webClient;
 
 	@Override
 	public Account createAccount(Account account){
@@ -251,6 +260,20 @@ public class AccountServiceImpl implements AccountService {
 	    account.getAccountLimits().put(limitType, limitValue);
 	    return accountRepository.save(account);
 	}
+	
+	public String callPncService1() {
+		String url = "http://localhost:9090/pnc/employees/details";
+		return restTemplate.getForObject(url, String.class);
+	}
+	
+//	public String callPncService() {
+//		return webClient.get()
+//				.uri("pnc/employees/details")
+//				.retrieve()
+//				.bodyToMono(String.class)
+//				.block();
+//		
+//	}
 
     
 }

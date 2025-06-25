@@ -15,6 +15,8 @@ public interface AccountService {
     public Account deposit(Long accountId, double amount);
     public Account withdraw(Long accountId, double amount);
     public void transfer(Long fromAccountId, Long toAccountId, double amount);
+	//public String callPncService();
+	public String callPncService1();
 
     //public List<Account> getAccountsByCustomerId(Long customerId);
 }
