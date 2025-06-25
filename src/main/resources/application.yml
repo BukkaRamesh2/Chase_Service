@@ -1,0 +1,12 @@
+resilience4j:
+  retry:
+     instances:
+        pncRetry:
+            maxRetryAttempts: 3
+            waitDuration: 1s	
+  circuitbreaker:
+     instances:
+        pncCircuit:
+            sliding-window-side: 5
+            failure-rate-threshold: 50
+            wait-duration-in-open-state: 5s

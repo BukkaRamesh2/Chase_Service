@@ -26,6 +26,10 @@ import com.chase.util.AccountNotFoundException;
 import com.chase.util.AccountStatusCheckService;
 import com.chase.util.AccountStatusCheckTask;
 import com.chase.util.RestTemplateConfig;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+
 import com.chase.util.AccountBalanceComparator;
 
 @Service
@@ -266,12 +270,19 @@ public class AccountServiceImpl implements AccountService {
 		return restTemplate.getForObject(url, String.class);
 	}
 	
+	@Retry(name = "pncRetry", fallbackMethod = "fallback")
+	@CircuitBreaker(name = "pncCircuit", fallbackMethod = "fallback" )
 	public String callPncService() {
 		return webClient.get()
 				.uri("pnc/employees/details")
 				.retrieve()
 				.bodyToMono(String.class)
 				.block();
+		
+	}
+	
+	public String fallback(Throwable t) {
+		return "PNC service is temporarily unavailable.";
 		
 	}
 
