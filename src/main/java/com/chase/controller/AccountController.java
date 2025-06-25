@@ -86,7 +86,7 @@ public class AccountController {
 	    
 	    @GetMapping("/callAnotherService")
 	    public String getPncDetails() {
-	    	return accountService.callPncService1();
+	    	return accountService.callPncService();
 	    }
 	    
 	    

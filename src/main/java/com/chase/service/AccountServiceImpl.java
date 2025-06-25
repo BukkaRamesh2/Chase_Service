@@ -266,14 +266,14 @@ public class AccountServiceImpl implements AccountService {
 		return restTemplate.getForObject(url, String.class);
 	}
 	
-//	public String callPncService() {
-//		return webClient.get()
-//				.uri("pnc/employees/details")
-//				.retrieve()
-//				.bodyToMono(String.class)
-//				.block();
-//		
-//	}
+	public String callPncService() {
+		return webClient.get()
+				.uri("pnc/employees/details")
+				.retrieve()
+				.bodyToMono(String.class)
+				.block();
+		
+	}
 
     
 }
